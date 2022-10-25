@@ -33,6 +33,20 @@
         <artifactId>mysql-connector-java</artifactId>
         <version>8.0.30</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+    <dependency>
+        <groupId>commons-net</groupId>
+        <artifactId>commons-net</artifactId>
+        <version>3.6</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.mockftpserver</groupId>
+        <artifactId>MockFtpServer</artifactId>
+        <version>2.7.1</version>
+        <scope>test</scope>
+    </dependency>
+
 
 </dependencies>
 
