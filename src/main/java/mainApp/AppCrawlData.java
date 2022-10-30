@@ -35,7 +35,6 @@ public class AppCrawlData {
 
     public AppCrawlData() throws IOException, SQLException {
         configConnection = new ConfigConnection();
-        ftp_connection = new FTP_Connection();
         crawlData = new CrawlData();
         staggingData = new StaggingData();
         warehouseData = new WarehouseData();
@@ -47,21 +46,21 @@ public class AppCrawlData {
 
     public void getConfigProcess() throws UnknownHostException {
         cf = configConnection.getConfigModel();
-        id = configConnection.insertNewRecordIntoFileLog(cf, date, destFolderUse + nameFile);
     }
 
     public void crawDataProcess() throws IOException {
+        id = configConnection.insertNewRecordIntoFileLog(cf, date, destFolderUse + nameFile);
         crawlData.crawlDataToFile(cf, destFolderCrawl + nameFile);
         configConnection.changeStatusFileLog(id, "crawled");
 
     }
 
     public void loadToFTP_Process() throws IOException {
+        ftp_connection = new FTP_Connection(cf);
         ftp_connection.uploadFile(destRemoteFolder, destFolderCrawl + nameFile);
         configConnection.changeStatusFileLog(id, "loadedToFTP");
         System.out.println("delete after load to FTP " + destFolderCrawl + nameFile + " :" + deleteFile(destFolderCrawl + nameFile));
     }
-
     public boolean deleteFile(String sourceFile) {
         File file = new File(sourceFile);
         return file.delete();
@@ -93,22 +92,16 @@ public class AppCrawlData {
         String check = configConnection.checkAlreadyCrawl(date);
         System.out.println(check);
         switch (check) {
-            case "false":
-                getConfigProcess();//false-loading
-                crawDataProcess();//loading-crawled
-                loadToFTP_Process();//crawled-loadedToFTP
-                dowloadFromFTP_Process();//loadedToFTP-dowloaded
-                stagingDataProcess();//dowloaded-stagged
-                warehouseDataProcess();//stagged-warehoused
-                break;
-            case "loading":
-                crawDataProcess();//loading-crawled
+            case "false","loading":
+                getConfigProcess();
+                crawDataProcess();//false-loading-crawled
                 loadToFTP_Process();//crawled-loadedToFTP
                 dowloadFromFTP_Process();//loadedToFTP-dowloaded
                 stagingDataProcess();//dowloaded-stagged
                 warehouseDataProcess();//stagged-warehoused
                 break;
             case "crawled":
+                getConfigProcess();
                 loadToFTP_Process();//crawled-loadedToFTP
                 dowloadFromFTP_Process();//loadedToFTP-dowloaded
                 stagingDataProcess();//dowloaded-stagged
