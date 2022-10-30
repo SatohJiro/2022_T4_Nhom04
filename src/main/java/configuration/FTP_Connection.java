@@ -8,16 +8,12 @@ import java.io.*;
 import java.util.Arrays;
 
 public class FTP_Connection {
-    private String IP_FTP = "103.97.126.21";
-    private int port = 21;
-    private String user = "satohjiro@satohjiro.tk";
-    private String pass = "123456";
     FTPClient ftpClient;
 
-    public FTP_Connection() throws IOException {
+    public FTP_Connection(ConfigModel cf) throws IOException {
         ftpClient = new FTPClient();
-        ftpClient.connect(IP_FTP, port);
-        ftpClient.login(user, pass);
+        ftpClient.connect(cf.getFTP_IP(), cf.getPORT());
+        ftpClient.login(cf.getUsername(), cf.getPassword());
         ftpClient.enterLocalPassiveMode();
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
     }
@@ -46,11 +42,5 @@ public class FTP_Connection {
         return source.substring(index + 1, source.length());
     }
 
-    public static void main(String[] args) throws IOException {
-        FTP_Connection ftp = new FTP_Connection();
-
-
-
-    }
 
 }
