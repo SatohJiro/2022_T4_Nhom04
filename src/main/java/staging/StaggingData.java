@@ -64,12 +64,12 @@ public class StaggingData {
                         value = null;
                 });
 
-                String provinceName = changeText(result.get(0));
+//                String provinceName = changeText();
 
 
                 // stagging
                 stmtStagging.setString(1, String.valueOf(new ObjectId()));
-                stmtStagging.setString(2, provinceName);
+                stmtStagging.setString(2, result.get(0));
                 stmtStagging.setString(3, getFormatDate(result.get(1)));
                 stmtStagging.setString(4, result.get(2));
                 stmtStagging.setString(5, result.get(3));
