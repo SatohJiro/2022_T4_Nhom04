@@ -2,8 +2,10 @@ package warehouse;
 
 public class WarehouseValue {
     private String id;
+    private int idLog;
     private int provinceId;
     private int dateId;
+    private int sessionId;
     private String time;
     private String current_temperature;
     private String overview_caption;
@@ -123,12 +125,30 @@ public class WarehouseValue {
         this.airRule = airRule;
     }
 
+    public int getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public int getIdLog() {
+        return idLog;
+    }
+
+    public void setIdLog(int idLog) {
+        this.idLog = idLog;
+    }
+
     @Override
     public String toString() {
         return "WarehouseValue{" +
                 "id='" + id + '\'' +
+                ", idLog=" + idLog +
                 ", provinceId=" + provinceId +
                 ", dateId=" + dateId +
+                ", sessionId=" + sessionId +
                 ", time='" + time + '\'' +
                 ", current_temperature='" + current_temperature + '\'' +
                 ", overview_caption='" + overview_caption + '\'' +

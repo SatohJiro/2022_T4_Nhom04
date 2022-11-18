@@ -14,7 +14,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class AppCrawlData {
     private ConfigConnection configConnection;
@@ -30,6 +33,7 @@ public class AppCrawlData {
     private final String beginFileName = "dataWeather_";
 
     private String date;
+    private String time;
     private String nameFile;
     private String id;
 
@@ -38,10 +42,10 @@ public class AppCrawlData {
         crawlData = new CrawlData();
         staggingData = new StaggingData();
         warehouseData = new WarehouseData();
-        long millis = System.currentTimeMillis();
-        java.sql.Date dateFormat = new java.sql.Date(millis);
-        this.date = dateFormat.toString();
-        this.nameFile = beginFileName + date + ".csv";
+        Date calendar = Calendar.getInstance().getTime();
+       this.date = new SimpleDateFormat("yyyy-MM-dd").format(calendar);
+        this.time = new SimpleDateFormat("HH:mm:ss").format(calendar);
+        this.nameFile = beginFileName + date +"_"+time.substring(0,2)+ "h.csv";
     }
 
     public void getConfigProcess() throws UnknownHostException {
@@ -49,9 +53,10 @@ public class AppCrawlData {
     }
 
     public void crawDataProcess() throws IOException {
-        id = configConnection.insertNewRecordIntoFileLog(cf, date, destFolderUse + nameFile);
+        id = configConnection.insertNewRecordIntoFileLog(cf, date, time,destFolderUse + nameFile);
         crawlData.crawlDataToFile(cf, destFolderCrawl + nameFile);
         configConnection.changeStatusFileLog(id, "crawled");
+        System.out.println("Crawled");
 
     }
 
@@ -59,6 +64,7 @@ public class AppCrawlData {
         ftp_connection = new FTP_Connection(cf);
         ftp_connection.uploadFile(destRemoteFolder, destFolderCrawl + nameFile);
         configConnection.changeStatusFileLog(id, "loadedToFTP");
+        System.out.println("LoadedToFTP");
         System.out.println("delete after load to FTP " + destFolderCrawl + nameFile + " :" + deleteFile(destFolderCrawl + nameFile));
     }
     public boolean deleteFile(String sourceFile) {
@@ -69,6 +75,7 @@ public class AppCrawlData {
     public void dowloadFromFTP_Process() throws IOException {
         ftp_connection.downloadFile(destRemoteFolder + nameFile, destFolderUse + nameFile);
         configConnection.changeStatusFileLog(id, "dowloaded");
+        System.out.println("Dowloaded");
     }
 
 
@@ -76,6 +83,7 @@ public class AppCrawlData {
         Document doc = staggingData.getDocumentLoaded();
         staggingData.loadData(doc);
         configConnection.changeStatusFileLog(id, "stagged");
+        System.out.println("Staged");
         System.out.println("delete after load to stagging " + destFolderUse + nameFile + " :" + deleteFile(destFolderUse + nameFile));
 
 
@@ -85,12 +93,16 @@ public class AppCrawlData {
         ArrayList<WarehouseValue> listValue = warehouseData.analyzeData();
         warehouseData.loadDataIntoWarehouse(listValue);
         configConnection.changeStatusFileLog(id, "warehoused");
+        warehouseData.updateExpired(Integer.parseInt(id)-1 ,time,date);
         staggingData.resetStaging();
+        System.out.println("Warehoused");
+
     }
 
     public void runAllProcess() throws IOException, SQLException {
-        String check = configConnection.checkAlreadyCrawl(date);
-        System.out.println(check);
+        String check = configConnection.checkAlreadyCrawl(date,time);
+        id = configConnection.getIdByStatus(check);
+        System.out.println("status = "+check+" | id = "+id);
         switch (check) {
             case "false","loading":
                 getConfigProcess();

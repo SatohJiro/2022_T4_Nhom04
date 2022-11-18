@@ -32,7 +32,7 @@ public class StaggingData {
 
     public void loadData(Document doc) throws UnknownHostException, SQLException {
             String path = String.valueOf(doc.get("Source_name"));
-            AnalyzeData(path);
+            AnalyzeData(path,Integer.parseInt(  String.valueOf(doc.get("id"))   ));
     }
 
     public Document getDocumentLoaded() {
@@ -44,8 +44,8 @@ public class StaggingData {
 
 
 
-    public List AnalyzeData(String path) throws SQLException {
-        String sqlStagging = "INSERT INTO stagging VALUES(?, ?, ?,?, ?,?, ?, ?,?, ?,?, ?, ?)";
+    public List AnalyzeData(String path,int id) throws SQLException {
+        String sqlStagging = "INSERT INTO stagging VALUES(?, ?, ?,?, ?,?, ?, ?,?, ?,?, ?, ?,?)";
         PreparedStatement stmtStagging = databaseStagging.prepareStatement(sqlStagging);
         BufferedReader br = null;
         List<String> result = new ArrayList();
@@ -64,23 +64,23 @@ public class StaggingData {
                         value = null;
                 });
 
-//                String provinceName = changeText();
 
 
                 // stagging
                 stmtStagging.setString(1, String.valueOf(new ObjectId()));
-                stmtStagging.setString(2, result.get(0));
-                stmtStagging.setString(3, getFormatDate(result.get(1)));
-                stmtStagging.setString(4, result.get(2));
-                stmtStagging.setString(5, result.get(3));
-                stmtStagging.setString(6, result.get(4));
-                stmtStagging.setString(7, result.get(5));
-                stmtStagging.setString(8, result.get(6));
-                stmtStagging.setString(9, result.get(7));
-                stmtStagging.setString(10, result.get(8));
-                stmtStagging.setString(11, result.get(9));
-                stmtStagging.setString(12, result.get(10));
-                stmtStagging.setString(13, result.get(11));
+                stmtStagging.setInt(2,id);
+                stmtStagging.setString(3, result.get(0));
+                stmtStagging.setString(4, getFormatDate(result.get(1)));
+                stmtStagging.setString(5, result.get(2));
+                stmtStagging.setString(6, result.get(3));
+                stmtStagging.setString(7, result.get(4));
+                stmtStagging.setString(8, result.get(5));
+                stmtStagging.setString(9, result.get(6));
+                stmtStagging.setString(10, result.get(7));
+                stmtStagging.setString(11, result.get(8));
+                stmtStagging.setString(12, result.get(9));
+                stmtStagging.setString(13, result.get(10));
+                stmtStagging.setString(14, result.get(11));
                 stmtStagging.execute();
 
 
