@@ -1,6 +1,7 @@
 package configuration;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
@@ -42,7 +43,7 @@ public class ConfigConnection {
         return cf;
     }
 
-    public String insertNewRecordIntoFileLog(ConfigModel cf, String date, String destFile) {
+    public String insertNewRecordIntoFileLog(ConfigModel cf, String date,String time, String destFile) {
         MongoCollection<Document> collection = database.getCollection("File_log");
         String id =String.valueOf(collection.countDocuments() + 1);
         Document doc = new Document();
@@ -51,6 +52,7 @@ public class ConfigConnection {
         doc.append("id", id);
         doc.append("Source_name", destFile);
         doc.append("Date", date);
+        doc.append("Time", time);
         doc.append("status", "loading");
         doc.append("Author", cf.getAuthor());
         collection.insertOne(doc);
@@ -66,12 +68,27 @@ public class ConfigConnection {
         UpdateResult result = collection.updateOne(query, updates, options);
     }
 
-    public String checkAlreadyCrawl(String date) {
+    public String getIdByStatus(String status) {
         MongoCollection<Document> collection = database.getCollection("File_log");
-        Document doc = collection.find(eq("Date", date)).first();
+        Document doc = collection.find(eq("status", status)).first();
         if (doc == null) return "false";
-        System.out.println(doc.toJson());
-        return String.valueOf(doc.get("status")) ;
+        return String.valueOf(doc.get("id")) ;
+    }
+
+    public String checkAlreadyCrawl(String date,String time) {
+        String hour = time.substring(0,2);
+        MongoCollection<Document> collection = database.getCollection("File_log");
+        MongoCursor<Document> cursor = collection.find(eq("Date", date)).iterator();
+        while(cursor.hasNext()) {
+            Document doc = cursor.next();
+            String hourDoc=String.valueOf(doc.get("Time")).substring(0,2);
+            if(hour.equals(hourDoc)){
+                System.out.println(doc.toJson());
+                return String.valueOf(doc.get("status"));
+            }
+        }
+
+        return "false" ;
     }
 
 
