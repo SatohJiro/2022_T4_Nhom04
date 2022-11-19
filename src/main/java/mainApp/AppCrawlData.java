@@ -27,9 +27,8 @@ public class AppCrawlData {
     private StaggingData staggingData;
     private WarehouseData warehouseData;
     private final String destRemoteFolder = "WeatherData/";
-    private final String destFolderCrawl = "./dataCrawl/";
-    private final String destFolderUse = "./data/";
-
+    private final String destFolderCrawl = "C:/Users/trana/OneDrive/Desktop/DataCrawl/";
+    private final String destFolderUse =  "C:/Users/trana/OneDrive/Desktop/Data/";
     private final String beginFileName = "dataWeather_";
 
     private String date;
@@ -69,6 +68,7 @@ public class AppCrawlData {
     }
     public boolean deleteFile(String sourceFile) {
         File file = new File(sourceFile);
+        if(file.exists()) System.out.println("exists");
         return file.delete();
     }
 
