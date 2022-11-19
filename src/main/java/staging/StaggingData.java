@@ -111,7 +111,22 @@ public class StaggingData {
 
     public void resetStaging() throws SQLException {
         String dropTableSQL = "drop table stagging";
-        String createTableSQL = "create table stagging( id varchar(24), province text, date text, time text, current_temperature text, overview_caption text, medium_temperature text, humidity text , vision text, wind_power text, temperature_stop_point text, UV_Index text, airRule text);";
+        String createTableSQL = "create table stagging(\n" +
+                "id varchar(24),\n" +
+                "idLog int,\n" +
+                "province text,\n" +
+                "date text,\n" +
+                "time time,\n" +
+                "current_temperature text,\n" +
+                "overview_caption text,\n" +
+                "medium_temperature text,\n" +
+                "humidity text ,\n" +
+                "vision text,\n" +
+                "wind_power text,\n" +
+                "temperature_stop_point text,\n" +
+                "UV_Index text,\n" +
+                "airRule text\n" +
+                ")";
         Statement st = this.databaseStagging.createStatement();
         st.execute(dropTableSQL);
         st.execute(createTableSQL);
