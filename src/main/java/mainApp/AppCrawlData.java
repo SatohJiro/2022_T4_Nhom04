@@ -8,7 +8,6 @@ import crawlData.CrawlData;
 import org.bson.Document;
 import staging.StaggingData;
 import warehouse.WarehouseData;
-import warehouse.WarehouseValue;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,8 +50,11 @@ public class AppCrawlData {
         cf = configConnection.getConfigModel();
     }
 
-    public void crawDataProcess() throws IOException {
-        id = configConnection.insertNewRecordIntoFileLog(cf, date, time,destFolderUse + nameFile);
+    public void crawDataProcess(String idPrev) throws IOException {
+        if(idPrev.equals("false"))
+            id = configConnection.insertNewRecordIntoFileLog(cf, date, time,destFolderUse + nameFile);
+        else
+            id = idPrev;
         crawlData.crawlDataToFile(cf, destFolderCrawl + nameFile);
         configConnection.changeStatusFileLog(id, "crawled");
         System.out.println("Crawled");
@@ -93,7 +95,7 @@ public class AppCrawlData {
         ArrayList<WarehouseValue> listValue = warehouseData.analyzeData();
         warehouseData.loadDataIntoWarehouse(listValue);
         configConnection.changeStatusFileLog(id, "warehoused");
-        warehouseData.updateExpired(Integer.parseInt(id)-1 ,time,date);
+        warehouseData.updateExpired(Integer.parseInt(configConnection.getIdPrev(id)) ,time,date);
         staggingData.resetStaging();
         System.out.println("Warehoused");
 
@@ -106,12 +108,13 @@ public class AppCrawlData {
         switch (check) {
             case "false","loading":
                 getConfigProcess();
-                crawDataProcess();//false-loading-crawled
+                crawDataProcess(id);//false-loading-crawled
                 loadToFTP_Process();//crawled-loadedToFTP
                 dowloadFromFTP_Process();//loadedToFTP-dowloaded
                 stagingDataProcess();//dowloaded-stagged
                 warehouseDataProcess();//stagged-warehoused
                 break;
+
             case "crawled":
                 getConfigProcess();
                 loadToFTP_Process();//crawled-loadedToFTP

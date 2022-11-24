@@ -74,6 +74,20 @@ public class ConfigConnection {
         if (doc == null) return "false";
         return String.valueOf(doc.get("id")) ;
     }
+    public String getIdPrev(String id) {
+        MongoCollection<Document> collection = database.getCollection("File_log");
+        String status="loading";
+        int idTemp = Integer.parseInt(id);
+        Document doc = null;
+        while(!status.equals("warehoused")) {
+            idTemp=idTemp-1;
+             doc = collection.find(eq("id", ""+idTemp)).first();
+            if (doc == null) return "false";
+            status=String.valueOf(doc.get("status"));
+        }
+        return idTemp+"" ;
+    }
+
 
     public String checkAlreadyCrawl(String date,String time) {
         String hour = time.substring(0,2);
@@ -94,6 +108,7 @@ public class ConfigConnection {
 
     public static void main(String[] args) throws UnknownHostException {
         ConfigConnection cf = new ConfigConnection();
+        System.out.println(cf.getIdPrev("52"));
 //        cf.getConfigModel();
 //        cf.changeStatusFileLog("1","stagged");
 
