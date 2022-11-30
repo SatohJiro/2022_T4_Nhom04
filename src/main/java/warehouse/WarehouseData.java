@@ -91,7 +91,7 @@ public class WarehouseData {
     }
 
     public void updateExpired(int id, String time,String date) throws SQLException {
-        String queryUpdate = "UPDATE warehouse SET expiredTime = ? , expiredDate = ? WHERE idLog = ?;";
+        String queryUpdate = "UPDATE warehouse SET expired_time = ? , expired_date = ? WHERE id_log = ?;";
         PreparedStatement updateWarehouse = databaseWarehouse.prepareStatement(queryUpdate);
         updateWarehouse.setString(1, time);
         updateWarehouse.setString(2, date);
