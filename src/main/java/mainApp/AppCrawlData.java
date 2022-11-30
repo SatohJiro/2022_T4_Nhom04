@@ -8,6 +8,7 @@ import crawlData.CrawlData;
 import org.bson.Document;
 import staging.StaggingData;
 import warehouse.WarehouseData;
+import warehouse.WarehouseValue;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +76,7 @@ public class AppCrawlData {
     }
 
     public void dowloadFromFTP_Process() throws IOException {
+        ftp_connection = new FTP_Connection(cf);
         ftp_connection.downloadFile(destRemoteFolder + nameFile, destFolderUse + nameFile);
         configConnection.changeStatusFileLog(id, "dowloaded");
         System.out.println("Dowloaded");
@@ -94,18 +96,27 @@ public class AppCrawlData {
     public void warehouseDataProcess() throws UnknownHostException, SQLException {
         ArrayList<WarehouseValue> listValue = warehouseData.analyzeData();
         warehouseData.loadDataIntoWarehouse(listValue);
-        configConnection.changeStatusFileLog(id, "warehoused");
-        warehouseData.updateExpired(Integer.parseInt(configConnection.getIdPrev(id)) ,time,date);
         staggingData.resetStaging();
+        String idPrev=configConnection.getIdPrev(id);
+        System.out.println("idPrev is: "+idPrev);
+        if (idPrev == null) {
+            configConnection.changeStatusFileLog(id, "warehoused");
+            System.out.println("Warehoused");
+            return;
+        };
+        int idParam = Integer.parseInt(idPrev);
+        warehouseData.updateExpired(idParam,time,date);
+        configConnection.changeStatusFileLog(id, "warehoused");
         System.out.println("Warehoused");
+
 
     }
 
     public void runAllProcess() throws IOException, SQLException {
-        String check = configConnection.checkAlreadyCrawl(date,time);
-        id = configConnection.getIdByStatus(check);
-        System.out.println("status = "+check+" | id = "+id);
-        switch (check) {
+        String[] check = configConnection.checkAlreadyCrawl(date,time);
+        id = check[1];
+        System.out.println("status = "+check[0]+" | idExist = "+check[1]);
+        switch (check[0]) {
             case "false","loading":
                 getConfigProcess();
                 crawDataProcess(id);//false-loading-crawled
@@ -118,6 +129,12 @@ public class AppCrawlData {
             case "crawled":
                 getConfigProcess();
                 loadToFTP_Process();//crawled-loadedToFTP
+                dowloadFromFTP_Process();//loadedToFTP-dowloaded
+                stagingDataProcess();//dowloaded-stagged
+                warehouseDataProcess();//stagged-warehoused
+                break;
+            case "loadedToFTP":
+                getConfigProcess();
                 dowloadFromFTP_Process();//loadedToFTP-dowloaded
                 stagingDataProcess();//dowloaded-stagged
                 warehouseDataProcess();//stagged-warehoused

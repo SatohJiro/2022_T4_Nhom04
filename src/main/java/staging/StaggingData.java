@@ -62,10 +62,10 @@ public class StaggingData {
                 result.forEach((value) -> {
                     if (value == "")
                         value = null;
+
                 });
 
-
-
+                result.set(0, result.get(0).replaceAll("\"",""));
                 // stagging
                 stmtStagging.setString(1, String.valueOf(new ObjectId()));
                 stmtStagging.setInt(2,id);

@@ -68,13 +68,9 @@ public class ConfigConnection {
         UpdateResult result = collection.updateOne(query, updates, options);
     }
 
-    public String getIdByStatus(String status) {
-        MongoCollection<Document> collection = database.getCollection("File_log");
-        Document doc = collection.find(eq("status", status)).first();
-        if (doc == null) return "false";
-        return String.valueOf(doc.get("id")) ;
-    }
+
     public String getIdPrev(String id) {
+        if(id.equals("1")) return null;
         MongoCollection<Document> collection = database.getCollection("File_log");
         String status="loading";
         int idTemp = Integer.parseInt(id);
@@ -89,7 +85,7 @@ public class ConfigConnection {
     }
 
 
-    public String checkAlreadyCrawl(String date,String time) {
+    public String[] checkAlreadyCrawl(String date,String time) {
         String hour = time.substring(0,2);
         MongoCollection<Document> collection = database.getCollection("File_log");
         MongoCursor<Document> cursor = collection.find(eq("Date", date)).iterator();
@@ -98,11 +94,11 @@ public class ConfigConnection {
             String hourDoc=String.valueOf(doc.get("Time")).substring(0,2);
             if(hour.equals(hourDoc)){
                 System.out.println(doc.toJson());
-                return String.valueOf(doc.get("status"));
+                return  new String[]{String.valueOf(doc.get("status")), String.valueOf(doc.get("id"))} ;
             }
         }
 
-        return "false" ;
+        return  new String[]{"false", "false"};
     }
 
 
