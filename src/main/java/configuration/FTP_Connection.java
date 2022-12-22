@@ -29,7 +29,7 @@ public class FTP_Connection {
         boolean done = ftpClient.storeFile(remoteFile, inputStream);
         return remoteFile;
     }
-
+//start dowload file from FPT server
     public boolean downloadFile(String remoteSourceName, String nameFile) throws IOException {
         OutputStream os = new BufferedOutputStream(new FileOutputStream(nameFile));
         boolean success = ftpClient.retrieveFile(remoteSourceName, os);
