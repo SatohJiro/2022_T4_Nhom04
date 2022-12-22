@@ -141,7 +141,7 @@ public class AppCrawlData {
                 stagingDataProcess();//dowloaded-stagged
                 warehouseDataProcess();//stagged-warehoused
                 break;
-
+            //status is dowloaded, start analyze data and load to staging database
             case "dowloaded":
                 stagingDataProcess();//dowloaded-stagged
                 warehouseDataProcess();//stagged-warehoused
