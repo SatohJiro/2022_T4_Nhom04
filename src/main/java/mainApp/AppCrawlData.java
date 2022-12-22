@@ -126,7 +126,7 @@ public class AppCrawlData {
                 stagingDataProcess();//dowloaded-stagged
                 warehouseDataProcess();//stagged-warehoused
                 break;
-
+            //status is crawled, start upload to FTP server
             case "crawled":
                 getConfigProcess();
                 loadToFTP_Process();//crawled-loadedToFTP
