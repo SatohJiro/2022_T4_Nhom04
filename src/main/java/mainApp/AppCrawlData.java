@@ -111,7 +111,7 @@ public class AppCrawlData {
 
 
     }
-
+// check status and run process
     public void runAllProcess() throws IOException, SQLException {
         String[] check = configConnection.checkAlreadyCrawl(date,time);
         id = check[1];
