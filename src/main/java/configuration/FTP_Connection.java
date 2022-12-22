@@ -21,7 +21,7 @@ public class FTP_Connection {
     public FTPClient getFTPConnection() throws IOException {
         return ftpClient;
     }
-
+// start upload file to FPT server
     public String uploadFile(String destFolderRemote,String sourceName) throws IOException {
         File LocalFile = new File(sourceName);
         InputStream inputStream = new FileInputStream(LocalFile);
