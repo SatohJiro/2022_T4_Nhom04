@@ -69,13 +69,13 @@ public class AppCrawlData {
         System.out.println("LoadedToFTP");
         System.out.println("delete after load to FTP " + destFolderCrawl + nameFile + " :" + deleteFile(destFolderCrawl + nameFile));
     }
-
+    //delete file on local
     public boolean deleteFile(String sourceFile) {
         File file = new File(sourceFile);
         if(file.exists()) System.out.println("exists");
         return file.delete();
     }
-
+// dowload file from FTP server
     public void dowloadFromFTP_Process() throws IOException {
         ftp_connection = new FTP_Connection(cf);
         ftp_connection.downloadFile(destRemoteFolder + nameFile, destFolderUse + nameFile);
