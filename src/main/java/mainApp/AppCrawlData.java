@@ -83,7 +83,6 @@ public class AppCrawlData {
         System.out.println("Dowloaded");
     }
 // load data to stagging for annalyze
-
     public void stagingDataProcess() throws UnknownHostException, SQLException {
         Document doc = staggingData.getDocumentLoaded();
         staggingData.loadData(doc);
@@ -93,7 +92,7 @@ public class AppCrawlData {
 
 
     }
-
+// analyze data and  push to warehouse
     public void warehouseDataProcess() throws UnknownHostException, SQLException {
         ArrayList<WarehouseValue> listValue = warehouseData.analyzeData();
         warehouseData.loadDataIntoWarehouse(listValue);
