@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class FTP_Connection {
     FTPClient ftpClient;
-
+//get FTP connection
     public FTP_Connection(ConfigModel cf) throws IOException {
         ftpClient = new FTPClient();
         ftpClient.connect(cf.getFTP_IP(), cf.getPORT());
