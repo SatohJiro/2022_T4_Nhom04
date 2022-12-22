@@ -29,7 +29,7 @@ public class CrawlData {
         });
         return temps;
     }
-
+// start crawling data from thoitiet.vn
     public String crawlDataToFile(ConfigModel cf,String nameFile) throws IOException {
             Data data = new Data(cf.getSourceLoad());
             return data.writeData(nameFile);
