@@ -82,7 +82,7 @@ public class AppCrawlData {
         configConnection.changeStatusFileLog(id, "dowloaded");
         System.out.println("Dowloaded");
     }
-
+// load data to stagging for annalyze
 
     public void stagingDataProcess() throws UnknownHostException, SQLException {
         Document doc = staggingData.getDocumentLoaded();
