@@ -117,6 +117,7 @@ public class AppCrawlData {
         id = check[1];
         System.out.println("status = "+check[0]+" | idExist = "+check[1]);
         switch (check[0]) {
+            //if status is false or loading, start all process
             case "false","loading":
                 getConfigProcess();
                 crawDataProcess(id);//false-loading-crawled
