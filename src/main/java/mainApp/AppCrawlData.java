@@ -150,6 +150,7 @@ public class AppCrawlData {
             case "stagged":
                 warehouseDataProcess();//stagged-warehoused
                 break;
+            //status is warehoused, complete all process
             case "warehoused":
                 break;
 
