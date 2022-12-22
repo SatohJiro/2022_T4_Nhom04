@@ -21,7 +21,7 @@ public class Weather {
     private String temperature_stop_point;
     private String UV_Index;
     private  String airRule;
-
+// generate data of weather data for crawling
     public Weather(String url) throws IOException {
         this.url = url;
         this.current_temperature = getDataStringByClass("current-temperature");
