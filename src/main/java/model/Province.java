@@ -23,7 +23,7 @@ public class Province {
     }
 
 
-
+// check crawl data by id of province
     private String[] getDataStringById(String id) throws IOException {
         Document document = Jsoup.connect(this.url).get();
         Element elm = document.getElementById(id);
