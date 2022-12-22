@@ -134,6 +134,7 @@ public class AppCrawlData {
                 stagingDataProcess();//dowloaded-stagged
                 warehouseDataProcess();//stagged-warehoused
                 break;
+            //status is loadedToFTP, start dowload from FTP server to local
             case "loadedToFTP":
                 getConfigProcess();
                 dowloadFromFTP_Process();//loadedToFTP-dowloaded
