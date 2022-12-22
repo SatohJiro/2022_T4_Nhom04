@@ -146,6 +146,7 @@ public class AppCrawlData {
                 stagingDataProcess();//dowloaded-stagged
                 warehouseDataProcess();//stagged-warehoused
                 break;
+                //status is stagged, start analyze data, check all dim table and load to warehouse database
             case "stagged":
                 warehouseDataProcess();//stagged-warehoused
                 break;
