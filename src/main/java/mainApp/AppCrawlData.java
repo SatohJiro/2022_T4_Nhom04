@@ -46,11 +46,11 @@ public class AppCrawlData {
         this.time = new SimpleDateFormat("HH:mm:ss").format(calendar);
         this.nameFile = beginFileName + date +"_"+time.substring(0,2)+ "h.csv";
     }
-
+//get config from database MongoDB
     public void getConfigProcess() throws UnknownHostException {
         cf = configConnection.getConfigModel();
     }
-
+    //if status is loading, start crawl data
     public void crawDataProcess(String idPrev) throws IOException {
         if(idPrev.equals("false"))
             id = configConnection.insertNewRecordIntoFileLog(cf, date, time,destFolderUse + nameFile);
@@ -61,7 +61,7 @@ public class AppCrawlData {
         System.out.println("Crawled");
 
     }
-
+//load file crawled to FTP server
     public void loadToFTP_Process() throws IOException {
         ftp_connection = new FTP_Connection(cf);
         ftp_connection.uploadFile(destRemoteFolder, destFolderCrawl + nameFile);
@@ -69,6 +69,7 @@ public class AppCrawlData {
         System.out.println("LoadedToFTP");
         System.out.println("delete after load to FTP " + destFolderCrawl + nameFile + " :" + deleteFile(destFolderCrawl + nameFile));
     }
+
     public boolean deleteFile(String sourceFile) {
         File file = new File(sourceFile);
         if(file.exists()) System.out.println("exists");
