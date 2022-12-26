@@ -61,7 +61,6 @@ public class AppCrawlData {
         System.out.println("Crawled");
 
     }
-//load file crawled to FTP server
     public void loadToFTP_Process() throws IOException {
         ftp_connection = new FTP_Connection(cf);
         ftp_connection.uploadFile(destRemoteFolder, destFolderCrawl + nameFile);
